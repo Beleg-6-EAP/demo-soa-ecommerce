@@ -1,6 +1,14 @@
 class OrdersController < ApplicationController
-  def index
+  def orders
     render json: Order.all
+  end
+
+  def shipments
+    render json: Shipment.all
+  end
+
+  def payments
+    render json: Payment.all
   end
 
   def create

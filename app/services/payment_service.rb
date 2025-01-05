@@ -4,7 +4,10 @@ class PaymentService
   end
 
   def create
-    Payment.create!(order_id: @order_id, success: simulate_payment)
+    {
+      order_id: @order_id,
+      success: simulate_payment
+    }
   end
 
   private
