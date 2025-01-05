@@ -7,11 +7,11 @@ class OrderService
   def create
     @order = Order.create!(user_id: @user_id, amount: @amount, status: 'pending')
 
-    payment_service = BrokerService.instance.find_service('PaymentService')
+    payment_service = Broker.new.find('PaymentService')
     payment_success = initiate_payment(payment_service[:endpoint])
 
     if payment_success
-      shipment_service = BrokerService.instance.find_service('ShipmentService')
+      shipment_service = Broker.new.find('ShipmentService')
       initiate_shipment(shipment_service[:endpoint])
 
       @order.update!(status: 'completed')

@@ -6,6 +6,5 @@ Rails.application.routes.draw do
   get '/api/payments', to: 'payments#index'
   get '/api/shipments', to: 'shipments#index'
 
-  post '/api/broker/register', to: 'broker#register'
   get '/api/broker/find/:name', to: 'broker#find'
 end

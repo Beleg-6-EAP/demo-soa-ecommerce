@@ -1,4 +1,4 @@
-require_dependency 'broker_service'
+require_dependency 'service_registry'
 
-BrokerService.instance.register_service('PaymentService', 'Take care of payment processing', 'http://localhost:8080/api/payments')
-BrokerService.instance.register_service('ShipmentService', 'Take care of shipment initialization', 'http://localhost:8080/api/shipments')
+ServiceRegistry.instance.register_service('PaymentService', 'Take care of payment processing', 'http://localhost:8080/api/payments')
+ServiceRegistry.instance.register_service('ShipmentService', 'Take care of shipment initialization', 'http://localhost:8080/api/shipments')

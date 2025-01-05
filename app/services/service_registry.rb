@@ -1,10 +1,10 @@
-class BrokerService
+class ServiceRegistry
   def initialize
     @services = []
   end
 
   def self.instance
-    @instance ||= BrokerService.new
+    @instance ||= ServiceRegistry.new
   end
 
   def register_service(name, description, endpoint)
