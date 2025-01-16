@@ -15,7 +15,9 @@ class OrdersController < ApplicationController
     user_id = params[:user_id]
     amount = params[:amount]
 
-    order = OrderService.new(user_id, amount).create
+    order = OrderService.new(user_id, amount)
+
+    order.create
 
     render json: order, status: :created
   end
