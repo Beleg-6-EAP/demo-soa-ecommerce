@@ -7,9 +7,7 @@ class ShipmentsController < ApplicationController
     user_id = params[:user_id]
     order_id = params[:user_id]
 
-    shipment = ShipmentService.new(user_id, order_id)
-
-    shipment.create
+    shipment = ShipmentService.new(user_id, order_id).create
 
     render json: shipment, status: :created
   end

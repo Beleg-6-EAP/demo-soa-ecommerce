@@ -11,7 +11,10 @@ class PaymentService
   end
 
   def register
-    ServiceRegistry.instance.register_service('PaymentService', 'Take care of payment processing', 'http://localhost:8080/api/payments')
+    HTTParty.post(
+      "http://localhost:8080/api/registry",
+      body: { name: "PaymentService", description: "Service to handle payments", endpoint: "http://localhost:8080/api/payments" }
+    )  
   end
 
   private

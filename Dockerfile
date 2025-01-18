@@ -1,19 +1,22 @@
-# Dockerfile
-FROM ruby:3.2.5
-RUN apt-get update -qq && apt-get install -y nodejs
+FROM ruby:3.1.4
 
-# Set working directory
-WORKDIR /demo-soa-ecommerce
+WORKDIR /app
 
-# Install dependencies
+RUN apt-get update -qq && \
+    apt-get install -y nodejs yarn && \
+    gem install foreman
+
 COPY Gemfile Gemfile.lock ./
+
 RUN bundle install
 
-# Copy the app
 COPY . .
 
-# Expose the port Rails runs on
-EXPOSE 8080
+RUN rails db:prepare
 
-# Start the Rails server
-CMD ["rails", "server", "-b", "0.0.0.0"]
+COPY Procfile /app/Procfile
+
+RUN rm -f /app/tmp/pids/server.pid
+
+CMD foreman start
+

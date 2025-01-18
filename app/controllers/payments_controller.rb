@@ -6,9 +6,7 @@ class PaymentsController < ApplicationController
   def create
     order_id = params[:order_id]
 
-    payment = PaymentService.new(order_id)
-
-    payment.create
+    payment = PaymentService.new(order_id).create
 
     render json: payment, status: :created
   end

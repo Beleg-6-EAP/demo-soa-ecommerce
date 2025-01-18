@@ -11,6 +11,9 @@ class ShipmentService
   end
 
   def register
-    ServiceRegistry.instance.register_service('ShipmentService', 'Take care of shipment initialization', 'http://localhost:8080/api/shipments')
+    HTTParty.post(
+      "http://localhost:8080/api/registry",
+      body: { name: "ShipmentService", description: "Service to handle shipments", endpoint: "http://localhost:8080/api/shipments" }
+    )
   end
 end
