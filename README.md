@@ -34,7 +34,7 @@ To create an order `POST` below request to `http://localhost:8080/api/orders`:
 ```json
 {
     "user_id": "1234-5678-8765-4321",
-    "amount": 42.0,
+    "amount": 42.0
 }
 ```
 
