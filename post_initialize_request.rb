@@ -2,9 +2,9 @@ require_relative './config/environment'
 
 
 def register_services
-  OrderService.new.register
-  PaymentService.new.register
-  ShipmentService.new.register
+  OrderService.register
+  PaymentService.register
+  ShipmentService.register
 end
 
 sleep(5)

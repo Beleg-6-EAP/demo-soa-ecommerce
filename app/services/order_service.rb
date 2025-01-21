@@ -2,19 +2,30 @@ class OrderService
   def initialize(user_id = nil, amount = nil)
     @user_id = user_id
     @amount = amount
+    @service_bus = ServiceBus
   end
 
   def create
     @order = Order.create!(user_id: @user_id, amount: @amount, status: 'pending')
 
-    payment_service = Broker.find('PaymentService')
-    payment_success = initiate_payment(payment_service[:endpoint])
+    payment_response = @service_bus.call_service(
+      "payment_service",
+      "process_payment",
+      { order: @order.id }
+    )
+    payment_success = payment_response[:process_payment_response][:value]
+
     Payment.create!(order_id: @order.id, success: payment_success)
 
     if payment_success
-      shipment_service = Broker.find('ShipmentService')
 
-      tracking_id = initiate_shipment(shipment_service[:endpoint])
+       shipment_response = @service_bus.call_service(
+        "shipment_service",
+        "create_shipment",
+        { order: @order.id, user: @user_id }
+      )
+      tracking_id = shipment_response[:create_shipment_response][:value]
+
       Shipment.create!(order_id: @order.id, tracking_id:)
 
       @order.update!(status: 'completed')
@@ -27,22 +38,15 @@ class OrderService
     @order
   end
 
-  def register
+  def self.register
     HTTParty.post(
       "http://localhost:8080/api/registry",
-      body: { name: "OrderService", description: "Service to handle orders", endpoint: "http://localhost:8080/api/orders" }
+      body: {
+        service: {
+          name: "order_service",
+          wsdl_url: "http://localhost:8080/orders/wsdl"
+        }
+      }
     )
-  end
-
-  private
-
-  def initiate_payment(endpoint)
-    response = HTTParty.post(endpoint, body: { order_id: @order.id })
-    response.parsed_response['success']
-  end
-
-  def initiate_shipment(endpoint)
-    response = HTTParty.post(endpoint, body: { order_id: @order.id, user_id: @user_id })
-    response.parsed_response['tracking_id']
   end
 end

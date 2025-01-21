@@ -1,14 +1,17 @@
 class ShipmentsController < ApplicationController
-  def index
-    render json: Shipment.all, status: :ok
-  end
+  soap_service namespace: 'urn:WashOut'
 
-  def create
-    user_id = params[:user_id]
-    order_id = params[:user_id]
+  soap_action "create_shipment",
+              :args => { :order =>:string, :user => :string },
+              :return => :string
 
-    shipment = ShipmentService.new(user_id, order_id).create
+  def create_shipment
+    order_id = params[:order]
+    user_id = params[:user]
 
-    render json: shipment, status: :created
+    tracking_id = "#{user_id}-#{order_id}"
+
+
+    render :soap => (tracking_id)
   end
 end

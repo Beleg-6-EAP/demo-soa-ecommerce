@@ -4,16 +4,21 @@ class ShipmentService
     @user_id = user_id
   end
 
-  def create
+  def create_shipment
     {
       tracking_id: "#{@user_id}-#{@order_id}"
     }
   end
 
-  def register
+  def self.register
     HTTParty.post(
       "http://localhost:8080/api/registry",
-      body: { name: "ShipmentService", description: "Service to handle shipments", endpoint: "http://localhost:8080/api/shipments" }
+      body: {
+        service: {
+          name: "shipment_service",
+          wsdl_url: "http://localhost:8080/shipments/wsdl"
+        }
+      }
     )
   end
 end

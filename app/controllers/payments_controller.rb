@@ -1,13 +1,14 @@
 class PaymentsController < ApplicationController
-  def index
-    render json: Payment.all, status: :ok
-  end
+  include WashOut::SOAP
+  soap_action "process_payment",
+              args: { order_id: :string },
+              return: :boolean
 
-  def create
+  def process_payment
     order_id = params[:order_id]
 
-    payment = PaymentService.new(order_id).create
+    payment_success = PaymentService.simulate_payment
 
-    render json: payment, status: :created
+    render soap: payment_success
   end
 end

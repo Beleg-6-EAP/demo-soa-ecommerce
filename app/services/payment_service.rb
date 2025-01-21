@@ -1,25 +1,18 @@
 class PaymentService
-  def initialize(order_id = nil)
-    @order_id = order_id
-  end
-
-  def create
-    {
-      order_id: @order_id,
-      success: simulate_payment
-    }
-  end
-
-  def register
-    HTTParty.post(
-      "http://localhost:8080/api/registry",
-      body: { name: "PaymentService", description: "Service to handle payments", endpoint: "http://localhost:8080/api/payments" }
-    )
-  end
-
-  private
-
-  def simulate_payment
+  def self.simulate_payment
     [false, true, true].sample
   end
+
+  def self.register
+    HTTParty.post(
+      "http://localhost:8080/api/registry",
+      body: {
+        service: {
+          name: "payment_service",
+          wsdl_url: "http://localhost:8080/payments/wsdl"
+        }
+      }
+    )
+  end
 end
+

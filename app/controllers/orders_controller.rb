@@ -1,24 +1,16 @@
 class OrdersController < ApplicationController
-  def orders
-    render json: Order.all
-  end
+  soap_service namespace: 'urn:WashOut'
 
-  def shipments
-    render json: Shipment.all
-  end
+  soap_action "create_order",
+              :args => { :user =>:string, :amount => :integer },
+              :return => :string
 
-  def payments
-    render json: Payment.all
-  end
-
-  def create
-    user_id = params[:user_id]
+  def create_shipment
+    order_id = params[:user]
     amount = params[:amount]
 
-    order = OrderService.new(user_id, amount)
+    order = OrderService.new(user_id, amount).create
 
-    order.create
-
-    render json: order, status: :created
+    render :soap => (order)
   end
 end
