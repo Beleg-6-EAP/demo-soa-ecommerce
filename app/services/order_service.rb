@@ -7,12 +7,12 @@ class OrderService
   def create
     @order = Order.create!(user_id: @user_id, amount: @amount, status: 'pending')
 
-    payment_service = Broker.new.find('PaymentService')
+    payment_service = Broker.find('PaymentService')
     payment_success = initiate_payment(payment_service[:endpoint])
     Payment.create!(order_id: @order.id, success: payment_success)
 
     if payment_success
-      shipment_service = Broker.new.find('ShipmentService')
+      shipment_service = Broker.find('ShipmentService')
 
       tracking_id = initiate_shipment(shipment_service[:endpoint])
       Shipment.create!(order_id: @order.id, tracking_id:)
@@ -30,7 +30,7 @@ class OrderService
   def register
     HTTParty.post(
       "http://localhost:8080/api/registry",
-      body: { name: "OrderService", description: "Service to handle Orders", endpoint: "http://localhost:8080/api/orders" }
+      body: { name: "OrderService", description: "Service to handle orders", endpoint: "http://localhost:8080/api/orders" }
     )
   end
 

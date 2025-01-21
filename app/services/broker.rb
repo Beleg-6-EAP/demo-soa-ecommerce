@@ -1,6 +1,6 @@
 
 class Broker
-  def find(name)
+  def self.find(name)
     ServiceRegistry.instance.find_service(name)
   end
 end

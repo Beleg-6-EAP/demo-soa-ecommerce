@@ -14,7 +14,7 @@ class PaymentService
     HTTParty.post(
       "http://localhost:8080/api/registry",
       body: { name: "PaymentService", description: "Service to handle payments", endpoint: "http://localhost:8080/api/payments" }
-    )  
+    )
   end
 
   private
