@@ -1,4 +1,4 @@
-name: Build & Test Docker Compose Services
+name: Rails Build & Tests
 
 on:
   push:
@@ -15,6 +15,18 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        
+      - name: Set up Ruby environment
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2.5'
+          bundler-cache: true
+
+      - name: Install dependencies
+        run: bundle install
+
+      - name: Run RSpec tests
+        run: bundle exec rspec spec/services/
 
       - name: Set up Docker Compose
         run: sudo apt-get update && sudo apt-get install -y docker-compose
