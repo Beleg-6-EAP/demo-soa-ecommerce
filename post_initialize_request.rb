@@ -1,16 +1,16 @@
 require_relative './config/environment'
 
-
 def register_services
-  OrderService.new.register
-  PaymentService.new.register
-  ShipmentService.new.register
+  OrderService.register
+  PaymentService.register
+  ShipmentService.register
 end
 
-sleep(5)
+sleep(3)
 
 begin
   register_services
+  puts "All services are now registred in the Service Registry"
 rescue => e
   puts "Failed to register service: #{e.message}"
 end

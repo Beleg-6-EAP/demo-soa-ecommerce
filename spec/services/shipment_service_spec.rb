@@ -1,30 +1,17 @@
-
 require 'rails_helper'
-require 'httparty'
 
 RSpec.describe ShipmentService do
-  subject { described_class.new("1234-1234", "user-1234") }
+  describe '#create_shipment' do
+    let(:order_id) { "1" }
+    let(:user_id) { "123-123" }
+    let(:shipment_service) { ShipmentService.new(order_id, user_id) }
 
-  describe '#create' do
-    let(:result) { subject.create }
+    it 'creates a shipment with the correct attributes' do
+      expect( shipment_service.create_shipment).to change(Shipment, :count).by(1)
 
-    it 'returns a hash with the correct tracking_id' do
-      expect(result[:tracking_id]).to eq("#{"user-1234"}-#{"1234-1234"}")
-    end
-  end
-
-  describe '#register' do
-    it 'sends a registration request to the registry endpoint' do
-      expect(HTTParty).to receive(:post).with(
-        "http://localhost:8080/api/registry",
-        body: {
-          name: "ShipmentService",
-          description: "Service to handle shipments",
-          endpoint: "http://localhost:8080/api/shipments"
-        }
-      )
-
-      subject.register
+      shipment = Shipment.last
+      expect(shipment.order_id).to eq("1")
+      expect(shipment.tracking_id).to eq("#{user_id}-#{order_id}")
     end
   end
 end
