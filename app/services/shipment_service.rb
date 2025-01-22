@@ -5,9 +5,7 @@ class ShipmentService
   end
 
   def create_shipment
-    {
-      tracking_id: "#{@user_id}-#{@order_id}"
-    }
+    Shipment.create!(order_id: @order_id, tracking_id: "#{@user_id}-#{@order_id}")
   end
 
   def self.register

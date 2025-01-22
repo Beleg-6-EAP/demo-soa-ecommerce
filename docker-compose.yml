@@ -11,4 +11,4 @@ services:
     environment:
       - SERVER_URL=http://localhost:8080
     network_mode: "host"
-    command: ruby ./post_initialize_request.rb && tail -f /dev/null
+    command:  tail -f /dev/null

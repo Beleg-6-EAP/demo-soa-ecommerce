@@ -5,6 +5,7 @@ class ShipmentsController < ApplicationController
               :args => { :order =>:string, :user => :string },
               :return => :string
 
+  # handels SOAP requests
   def create_shipment
     order_id = params[:order]
     user_id = params[:user]
@@ -13,5 +14,10 @@ class ShipmentsController < ApplicationController
 
 
     render :soap => (tracking_id)
+  end
+
+  # handels HTTP requests
+  def list
+    render json: Shipment.all, status: :ok
   end
 end

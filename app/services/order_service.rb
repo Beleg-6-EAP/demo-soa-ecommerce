@@ -15,18 +15,13 @@ class OrderService
     )
     payment_success = payment_response[:process_payment_response][:value]
 
-    Payment.create!(order_id: @order.id, success: payment_success)
-
     if payment_success
 
-       shipment_response = @service_bus.call_service(
+      @service_bus.call_service(
         "shipment_service",
         "create_shipment",
         { order: @order.id, user: @user_id }
       )
-      tracking_id = shipment_response[:create_shipment_response][:value]
-
-      Shipment.create!(order_id: @order.id, tracking_id:)
 
       @order.update!(status: 'completed')
     else

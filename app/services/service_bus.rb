@@ -8,10 +8,6 @@ class ServiceBus
     begin
       response = client.call(operation.to_sym, message: message)
       response.body
-    rescue Savon::SOAPFault => e
-      raise "SOAP Fault: #{e.message}"
-    rescue Savon::HTTPError => e
-      raise "HTTP Error: #{e.message}"
     rescue Savon::Error => e
       raise "Error: #{e.message}"
     end

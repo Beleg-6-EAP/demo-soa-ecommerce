@@ -1,6 +1,13 @@
 class PaymentService
-  def self.simulate_payment
-    [false, true, true].sample
+  def initialize(order_id = nil)
+    @order_id = order_id
+  end
+
+  def simulate_payment
+    payment_success = [false, true, true].sample
+    Payment.create!(order_id: @order_id, success: payment_success)
+
+    payment_success
   end
 
   def self.register
