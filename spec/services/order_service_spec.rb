@@ -4,6 +4,7 @@ RSpec.describe OrderService do
   describe '#create' do
     let(:user_id) { "123" }
     let(:amount) { 100.0 }
+    let(:order_service) { OrderService.new(user_id, amount) }
 
     before do
       allow(ServiceBus).to receive(:call_service).and_return(
@@ -13,7 +14,9 @@ RSpec.describe OrderService do
     end
 
     it 'creates an order with the correct user_id and amount' do
-      expect(OrderService.new(user_id, amount).create).to change(Order, :count).by(1)
+      expect{
+        order_service.create
+      }.to change(Order, :count).by(1)
 
       order = Order.last
       expect(order.user_id).to eq(user_id)

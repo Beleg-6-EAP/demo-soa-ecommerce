@@ -6,7 +6,9 @@ RSpec.describe PaymentService do
     let(:payment_service) { PaymentService.new(order_id) }
 
     it 'creates a payment' do
-      expect(payment_service.simulate_payment).to change(Payment, :count).by(1)
+      expect{
+        payment_service.simulate_payment 
+      }.to change(Payment, :count).by(1)
     end
   end
 end
